@@ -40,6 +40,27 @@ def check_FeliCa():
             pass
 
         try:
+            idm, pmm = tag.polling(system_code=0x832c)
+            idm = binascii.hexlify(idm)
+            print 'DISCOVERED: sys=0x832c/ecomyca idm=' + idm
+        except nfc.tag.tt3.Type3TagCommandError:
+            pass
+
+        try:
+            idm, pmm = tag.polling(system_code=0x8592)
+            idm = binascii.hexlify(idm)
+            print 'DISCOVERED: sys=0x8592/paspy idm=' + idm
+        except nfc.tag.tt3.Type3TagCommandError:
+            pass
+
+        try:
+            idm, pmm = tag.polling(system_code=0x865e)
+            idm = binascii.hexlify(idm)
+            print 'DISCOVERED: sys=0x865e/sapica idm=' + idm
+        except nfc.tag.tt3.Type3TagCommandError:
+            pass
+
+        try:
             idm, pmm = tag.polling(system_code=0x12fc)
             idm = binascii.hexlify(idm)
             print 'DISCOVERED: sys=0x12fc/ndef idm=' + idm

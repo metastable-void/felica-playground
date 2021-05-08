@@ -44,6 +44,7 @@ def SetAngle(angle):
 def check_idm(idm):
     if idm in idm_list:
         SetAngle(170)
+        time.sleep(60)
 
 # 待ち受けの1サイクル秒
 TIME_cycle = 10.0

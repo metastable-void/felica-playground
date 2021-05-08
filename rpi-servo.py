@@ -12,18 +12,23 @@ import os
 dirname = os.path.dirname(os.path.abspath(__file__))
 
 idm_list = []
-try:
-    with open(dirname + '/idm-list.txt') as f:
-        for line in f:
-            line = line.strip()
-            if line.startswith('#'):
-                continue
-            if line == '':
-                continue
-            idm_list.append(line.lower())
-except IOError:
-    pass
 
+def load_idms():
+    try:
+        with open(dirname + '/idm-list.txt') as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith('#'):
+                    continue
+                if line == '':
+                    continue
+                line = line.lower()
+                if not (line in idm_list):
+                    idm_list.append(line)
+    except IOError:
+        pass
+
+load_idms()
 
 servopin = 23
 GPIO.setwarnings(False)
@@ -43,6 +48,7 @@ def SetAngle(angle):
 
 def check_idm(idm):
     if idm in idm_list:
+        print 'MATCHED: opening...'
         SetAngle(170)
         time.sleep(60)
 
@@ -149,6 +155,7 @@ try:
     while True:
         SetAngle(80)
         check_FeliCa()
+        load_idms()
 except KeyboardInterrupt:
     pass
 

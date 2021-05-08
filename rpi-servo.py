@@ -7,6 +7,19 @@ from threading import Thread, Timer
 import RPi.GPIO as GPIO
 import time
 import signal
+import os
+
+dirname = os.path.dirname(os.path.abspath(__file__))
+
+idm_list = []
+with open(dirname + '/idm-list.txt') as f:
+    for line in f:
+        line = line.strip()
+        if line.startswith('#'):
+            continue
+        if line == '':
+            continue
+        idm_list.append(line.lower())
 
 
 servopin = 23
@@ -24,6 +37,10 @@ def SetAngle(angle):
     time.sleep(1)
     GPIO.output(servopin, False)
     p.ChangeDutyCycle(0)
+
+def check_idm(idm):
+    if idm in idm_list:
+        SetAngle(170)
 
 # 待ち受けの1サイクル秒
 TIME_cycle = 10.0
@@ -52,12 +69,13 @@ def check_FeliCa():
         idm = binascii.hexlify(tag.idm)
         sys = tag.sys
         print 'RESPONSE: sys=' + int_to_hex(sys) + ' idm=' + idm
+        check_idm(idm)
         
         try:
             idm, pmm = tag.polling(system_code=0x0003)
             idm = binascii.hexlify(idm)
             print 'DISCOVERED: sys=0x0003/suica_compat idm=' + idm
-            SetAngle(170)
+            check_idm(idm)
         except nfc.tag.tt3.Type3TagCommandError:
             pass
 
@@ -65,6 +83,7 @@ def check_FeliCa():
             idm, pmm = tag.polling(system_code=0x832c)
             idm = binascii.hexlify(idm)
             print 'DISCOVERED: sys=0x832c/ecomyca idm=' + idm
+            check_idm(idm)
         except nfc.tag.tt3.Type3TagCommandError:
             pass
 
@@ -72,6 +91,7 @@ def check_FeliCa():
             idm, pmm = tag.polling(system_code=0x8592)
             idm = binascii.hexlify(idm)
             print 'DISCOVERED: sys=0x8592/paspy idm=' + idm
+            check_idm(idm)
         except nfc.tag.tt3.Type3TagCommandError:
             pass
 
@@ -79,6 +99,7 @@ def check_FeliCa():
             idm, pmm = tag.polling(system_code=0x865e)
             idm = binascii.hexlify(idm)
             print 'DISCOVERED: sys=0x865e/sapica idm=' + idm
+            check_idm(idm)
         except nfc.tag.tt3.Type3TagCommandError:
             pass
 
@@ -86,6 +107,7 @@ def check_FeliCa():
             idm, pmm = tag.polling(system_code=0x12fc)
             idm = binascii.hexlify(idm)
             print 'DISCOVERED: sys=0x12fc/ndef idm=' + idm
+            check_idm(idm)
         except nfc.tag.tt3.Type3TagCommandError:
             pass
 
@@ -93,6 +115,7 @@ def check_FeliCa():
             idm, pmm = tag.polling(system_code=0xfe00)
             idm = binascii.hexlify(idm)
             print 'DISCOVERED: sys=0xfe00/common idm=' + idm
+            check_idm(idm)
         except nfc.tag.tt3.Type3TagCommandError:
             pass
 
@@ -100,6 +123,7 @@ def check_FeliCa():
             idm, pmm = tag.polling(system_code=0x88b4)
             idm = binascii.hexlify(idm)
             print 'DISCOVERED: sys=0x88b4/lite_s idm=' + idm
+            check_idm(idm)
         except nfc.tag.tt3.Type3TagCommandError:
             pass
 
@@ -107,6 +131,7 @@ def check_FeliCa():
             idm, pmm = tag.polling(system_code=0x957a)
             idm = binascii.hexlify(idm)
             print 'DISCOVERED: sys=0x957a/secure_id idm=' + idm
+            check_idm(idm)
         except nfc.tag.tt3.Type3TagCommandError:
             pass
 

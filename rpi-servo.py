@@ -145,7 +145,7 @@ try:
     while True:
         SetAngle(80)
         check_FeliCa()
-except Exception:
+except KeyboardInterrupt:
     pass
 
 GPIO.cleanup()

@@ -116,8 +116,12 @@ def check_FeliCa():
 
     clf.close()
 
-SetAngle(80)
-check_FeliCa()
+try:
+    while True:
+        SetAngle(80)
+        check_FeliCa()
+except Exception:
+    pass
 
 GPIO.cleanup()
 

@@ -12,14 +12,17 @@ import os
 dirname = os.path.dirname(os.path.abspath(__file__))
 
 idm_list = []
-with open(dirname + '/idm-list.txt') as f:
-    for line in f:
-        line = line.strip()
-        if line.startswith('#'):
-            continue
-        if line == '':
-            continue
-        idm_list.append(line.lower())
+try:
+    with open(dirname + '/idm-list.txt') as f:
+        for line in f:
+            line = line.strip()
+            if line.startswith('#'):
+                continue
+            if line == '':
+                continue
+            idm_list.append(line.lower())
+except IOError:
+    pass
 
 
 servopin = 23
